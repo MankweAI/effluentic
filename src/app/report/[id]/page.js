@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react"; // Import 'use'
 import { supabase } from "@/lib/supabaseClient";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { generatePdf } from "@/lib/pdfGenerator";
@@ -15,7 +15,10 @@ const formatCurrency = (value) => {
 };
 
 export default function ReportPage({ params }) {
-  const { id } = params;
+  // Correctly unwrap the 'id' from the params Promise
+  const resolvedParams = use(params);
+  const { id } = resolvedParams;
+
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function HighFatWastewaterPage() {
+export default function DafSizingCalculatorPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     industry: "food_beverage",
@@ -16,7 +16,6 @@ export default function HighFatWastewaterPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Clamp values to min/max to prevent invalid form submission
     let clampedValue = Number(value);
     if (name === "flow_rate_m3_hr") {
       if (clampedValue > 500) clampedValue = 500;
@@ -33,7 +32,6 @@ export default function HighFatWastewaterPage() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-
     try {
       const response = await fetch("/api/report/generate", {
         method: "POST",
@@ -44,12 +42,10 @@ export default function HighFatWastewaterPage() {
           tss_mg_l: Number(formData.tss_mg_l),
         }),
       });
-
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to generate report.");
       }
-
       const result = await response.json();
       router.push(`/report/${result.reportId}`);
     } catch (err) {
@@ -60,31 +56,28 @@ export default function HighFatWastewaterPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
-      {/* --- Section 1: Video --- */}
       <section className="text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-navy">
-          The Engineer&apos;s Guide to High-FOG Effluent
+          DAF Sizing & CAPEX Calculator
         </h1>
         <p className="mt-4 text-lg text-brand-steel max-w-2xl mx-auto">
-          A senior process engineer, Johan, provides a comprehensive overview of
-          treating high-fat, oil, and grease (FOG) wastewater.
+          A direct consultation with Johan on the critical design parameters for
+          sizing a Dissolved Air Flotation system.
         </p>
         <div className="mt-8 aspect-video bg-gray-800 rounded-lg shadow-xl flex items-center justify-center text-white mx-auto max-w-3xl border-4 border-white">
-          <p className="font-mono">Video Placeholder (16:9)</p>
+          <p className="font-mono">Video Placeholder: The DAF Specialist</p>
         </div>
       </section>
 
-      {/* --- Section 2: Calculator --- */}
       <section className="mt-16">
         <div className="bg-brand-off-white p-8 md:p-10 rounded-lg shadow-lg border border-gray-200 max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold text-brand-navy mb-2">
-            Get Your Baseline Data
+            Instantly Size Your DAF
           </h2>
           <p className="text-brand-steel mb-8">
-            Enter your plant&apos;s data to generate an instant pre-feasibility
-            report.
+            Get the budgetary CAPEX, OPEX, and footprint data required for your
+            pre-feasibility report.
           </p>
-
           <form onSubmit={handleSubmit} className="space-y-8">
             <div>
               <label
@@ -105,7 +98,6 @@ export default function HighFatWastewaterPage() {
                 <option value="dairy_processing">Dairy Processing</option>
               </select>
             </div>
-
             <div className="space-y-4">
               <label
                 htmlFor="flow_rate_m3_hr"
@@ -137,7 +129,6 @@ export default function HighFatWastewaterPage() {
                 </div>
               </div>
             </div>
-
             <div className="space-y-4">
               <label
                 htmlFor="tss_mg_l"
@@ -169,7 +160,6 @@ export default function HighFatWastewaterPage() {
                 </div>
               </div>
             </div>
-
             <button
               type="submit"
               disabled={isLoading}
@@ -203,7 +193,6 @@ export default function HighFatWastewaterPage() {
                 "Generate Report"
               )}
             </button>
-
             {error && (
               <p className="text-red-500 text-sm mt-4 text-center">{error}</p>
             )}

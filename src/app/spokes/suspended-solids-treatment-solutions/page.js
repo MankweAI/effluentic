@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function HighFatWastewaterPage() {
+export default function SuspendedSolidsPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     industry: "food_beverage",
@@ -14,12 +14,22 @@ export default function HighFatWastewaterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Update industry options based on contaminant type
+  useEffect(() => {
+    if (formData.contaminant_type === "High-Density") {
+      setFormData((prev) => ({ ...prev, industry: "mining_beneficiation" }));
+    } else {
+      setFormData((prev) => ({ ...prev, industry: "food_beverage" }));
+    }
+  }, [formData.contaminant_type]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Clamp values to min/max to prevent invalid form submission
-    let clampedValue = Number(value);
+    let clampedValue =
+      name.includes("flow") || name.includes("tss") ? Number(value) : value;
+
     if (name === "flow_rate_m3_hr") {
-      if (clampedValue > 500) clampedValue = 500;
+      if (clampedValue > 2000) clampedValue = 2000;
       if (clampedValue < 1) clampedValue = 1;
     }
     if (name === "tss_mg_l") {
@@ -33,7 +43,6 @@ export default function HighFatWastewaterPage() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-
     try {
       const response = await fetch("/api/report/generate", {
         method: "POST",
@@ -44,12 +53,10 @@ export default function HighFatWastewaterPage() {
           tss_mg_l: Number(formData.tss_mg_l),
         }),
       });
-
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to generate report.");
       }
-
       const result = await response.json();
       router.push(`/report/${result.reportId}`);
     } catch (err) {
@@ -58,34 +65,59 @@ export default function HighFatWastewaterPage() {
     }
   };
 
+  const isLowDensity = formData.contaminant_type === "Low-Density";
+
   return (
     <div className="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
-      {/* --- Section 1: Video --- */}
       <section className="text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-navy">
-          The Engineer&apos;s Guide to High-FOG Effluent
+          Suspended Solids (TSS) Treatment Solutions
         </h1>
         <p className="mt-4 text-lg text-brand-steel max-w-2xl mx-auto">
-          A senior process engineer, Johan, provides a comprehensive overview of
-          treating high-fat, oil, and grease (FOG) wastewater.
+          Johan acts as a digital triage engineer, helping you identify the
+          correct treatment principle based on the density of your suspended
+          solids.
         </p>
         <div className="mt-8 aspect-video bg-gray-800 rounded-lg shadow-xl flex items-center justify-center text-white mx-auto max-w-3xl border-4 border-white">
-          <p className="font-mono">Video Placeholder (16:9)</p>
+          <p className="font-mono">
+            Video Placeholder: The Digital Triage Engineer
+          </p>
         </div>
       </section>
 
-      {/* --- Section 2: Calculator --- */}
       <section className="mt-16">
         <div className="bg-brand-off-white p-8 md:p-10 rounded-lg shadow-lg border border-gray-200 max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold text-brand-navy mb-2">
-            Get Your Baseline Data
+            Diagnostic Calculator
           </h2>
           <p className="text-brand-steel mb-8">
-            Enter your plant&apos;s data to generate an instant pre-feasibility
-            report.
+            First, select your contaminant type to configure the calculator for
+            your application.
           </p>
-
           <form onSubmit={handleSubmit} className="space-y-8">
+            <div>
+              <label
+                htmlFor="contaminant_type"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Primary Contaminant Type
+              </label>
+              <select
+                id="contaminant_type"
+                name="contaminant_type"
+                value={formData.contaminant_type}
+                onChange={handleInputChange}
+                className="mt-1 block w-full px-4 py-3 bg-brand-light-gray border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-navy focus:border-brand-navy"
+              >
+                <option value="Low-Density">
+                  Low-Density (Fats, Oils, Organics)
+                </option>
+                <option value="High-Density">
+                  High-Density (Grit, Minerals, Metals)
+                </option>
+              </select>
+            </div>
+
             <div>
               <label
                 htmlFor="industry"
@@ -100,9 +132,17 @@ export default function HighFatWastewaterPage() {
                 onChange={handleInputChange}
                 className="mt-1 block w-full px-4 py-3 bg-brand-light-gray border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-navy focus:border-brand-navy"
               >
-                <option value="food_beverage">Food & Beverage</option>
-                <option value="meat_processing">Meat Processing</option>
-                <option value="dairy_processing">Dairy Processing</option>
+                {isLowDensity ? (
+                  <>
+                    <option value="food_beverage">Food & Beverage</option>
+                    <option value="meat_processing">Meat Processing</option>
+                    <option value="dairy_processing">Dairy Processing</option>
+                  </>
+                ) : (
+                  <option value="mining_beneficiation">
+                    Mining & Beneficiation
+                  </option>
+                )}
               </select>
             </div>
 
@@ -119,7 +159,7 @@ export default function HighFatWastewaterPage() {
                   id="flow_rate_m3_hr"
                   name="flow_rate_m3_hr"
                   min="1"
-                  max="500"
+                  max="2000"
                   step="1"
                   value={formData.flow_rate_m3_hr}
                   onChange={handleInputChange}
@@ -138,37 +178,39 @@ export default function HighFatWastewaterPage() {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <label
-                htmlFor="tss_mg_l"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Suspended Solids (TSS)
-              </label>
-              <div className="flex items-center space-x-4">
-                <input
-                  type="range"
-                  id="tss_mg_l"
-                  name="tss_mg_l"
-                  min="100"
-                  max="8000"
-                  step="100"
-                  value={formData.tss_mg_l}
-                  onChange={handleInputChange}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-                <div className="flex items-center">
+            {isLowDensity && (
+              <div className="space-y-4">
+                <label
+                  htmlFor="tss_mg_l"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Suspended Solids (TSS)
+                </label>
+                <div className="flex items-center space-x-4">
                   <input
-                    type="number"
+                    type="range"
+                    id="tss_mg_l"
                     name="tss_mg_l"
+                    min="100"
+                    max="8000"
+                    step="100"
                     value={formData.tss_mg_l}
                     onChange={handleInputChange}
-                    className="w-24 font-mono text-right bg-brand-light-gray border border-gray-300 rounded-md px-2 py-1"
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                   />
-                  <span className="ml-2 text-brand-steel">mg/L</span>
+                  <div className="flex items-center">
+                    <input
+                      type="number"
+                      name="tss_mg_l"
+                      value={formData.tss_mg_l}
+                      onChange={handleInputChange}
+                      className="w-24 font-mono text-right bg-brand-light-gray border border-gray-300 rounded-md px-2 py-1"
+                    />
+                    <span className="ml-2 text-brand-steel">mg/L</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             <button
               type="submit"
@@ -203,7 +245,6 @@ export default function HighFatWastewaterPage() {
                 "Generate Report"
               )}
             </button>
-
             {error && (
               <p className="text-red-500 text-sm mt-4 text-center">{error}</p>
             )}
