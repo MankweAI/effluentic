@@ -11,32 +11,50 @@ const DoughnutChart = ({ data }) => {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       const total = data.capexMax + data.opexAnnual;
-      const capexPercentage = (data.capexMax / total) * 100;
-      const opexPercentage = (data.opexAnnual / total) * 100;
+      const capexPercentage = data.capexMax / total;
+      const opexPercentage = data.opexAnnual / total;
 
-      const drawSegment = (startAngle, endAngle, color) => {
+      let current = 0;
+      const animate = () => {
+        if (current >= 100) return;
+        current += 2;
+        ctx.clearRect(0, 0, 200, 200);
+
+        // Draw CAPEX segment
         ctx.beginPath();
-        ctx.moveTo(100, 100);
-        ctx.arc(100, 100, 80, startAngle, endAngle);
-        ctx.closePath();
-        ctx.fillStyle = color;
+        ctx.arc(
+          100,
+          100,
+          80,
+          0,
+          Math.PI * 2 * capexPercentage * (current / 100)
+        );
+        ctx.lineTo(100, 100);
+        ctx.fillStyle = "#3B82F6";
         ctx.fill();
+
+        // Draw OPEX segment
+        ctx.beginPath();
+        ctx.arc(
+          100,
+          100,
+          80,
+          Math.PI * 2 * capexPercentage,
+          Math.PI * 2 * (capexPercentage + opexPercentage * (current / 100))
+        );
+        ctx.lineTo(100, 100);
+        ctx.fillStyle = "#10B981";
+        ctx.fill();
+
+        // Inner circle
+        ctx.beginPath();
+        ctx.arc(100, 100, 50, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+
+        requestAnimationFrame(animate);
       };
-
-      ctx.clearRect(0, 0, 200, 200);
-
-      const capexEndAngle = (Math.PI / 180) * (capexPercentage * 3.6);
-      drawSegment(0, capexEndAngle, "#3B82F6");
-
-      const opexEndAngle =
-        capexEndAngle + (Math.PI / 180) * (opexPercentage * 3.6);
-      drawSegment(capexEndAngle, opexEndAngle, "#10B981");
-
-      // Inner circle for doughnut effect
-      ctx.beginPath();
-      ctx.arc(100, 100, 50, 0, 2 * Math.PI);
-      ctx.fillStyle = "#fff";
-      ctx.fill();
+      animate();
     }
   }, [data]);
 

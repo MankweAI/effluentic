@@ -6,6 +6,9 @@ import LeadCaptureModal from "@/components/LeadCaptureModal";
 import ReportSkeleton from "@/components/ReportSkeleton";
 import BarChart from "@/components/BarChart";
 import DoughnutChart from "@/components/DoughnutChart";
+import FactoryIcon from "@/components/icons/FactoryIcon";
+import WaterDropIcon from "@/components/icons/WaterDropIcon";
+import BeakerIcon from "@/components/icons/BeakerIcon";
 import { generatePdf } from "@/lib/pdfGenerator";
 
 // Helper to format currency
@@ -194,38 +197,41 @@ export default function ReportPage({ params }) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column: Summary */}
             <div className="lg:col-span-1 space-y-8">
-              <div className="bg-brand-off-white p-6 rounded-lg shadow">
+              <div className="bg-brand-off-white p-6 rounded-lg shadow card-hover card-border-info">
                 <h2 className="text-xl font-bold text-brand-navy-dark border-b-2 border-brand-light-gray pb-2 mb-4">
                   Input Parameters
                 </h2>
-                <ul className="space-y-3 text-brand-steel-dark">
-                  <li className="flex justify-between">
-                    <strong>Industry:</strong>
-                    <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                      {report.industry}
-                    </span>
+                <ul className="space-y-4 text-brand-steel-dark">
+                  <li className="flex items-center">
+                    <FactoryIcon className="h-6 w-6 mr-3 text-brand-info" />
+                    <div className="flex justify-between w-full">
+                      <strong>Industry:</strong>
+                      <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                        {report.industry}
+                      </span>
+                    </div>
                   </li>
-                  <li className="flex justify-between">
-                    <strong>Flow Rate:</strong>
-                    <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                      {report.flow_rate_m3_hr} m³/hr
-                    </span>
+                  <li className="flex items-center">
+                    <WaterDropIcon className="h-6 w-6 mr-3 text-brand-info" />
+                    <div className="flex justify-between w-full">
+                      <strong>Flow Rate:</strong>
+                      <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                        {report.flow_rate_m3_hr} m³/hr
+                      </span>
+                    </div>
                   </li>
-                  <li className="flex justify-between">
-                    <strong>TSS:</strong>
-                    <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                      {report.tss_mg_l} mg/L
-                    </span>
-                  </li>
-                  <li className="flex justify-between">
-                    <strong>Contaminant:</strong>
-                    <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                      {report.contaminant_type}
-                    </span>
+                  <li className="flex items-center">
+                    <BeakerIcon className="h-6 w-6 mr-3 text-brand-info" />
+                    <div className="flex justify-between w-full">
+                      <strong>TSS:</strong>
+                      <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                        {report.tss_mg_l} mg/L
+                      </span>
+                    </div>
                   </li>
                 </ul>
               </div>
-              <div className="bg-brand-off-white p-6 rounded-lg shadow">
+              <div className="bg-brand-off-white p-6 rounded-lg shadow card-hover card-border-success">
                 <h2 className="text-xl font-bold text-brand-navy-dark border-b-2 border-brand-light-gray pb-2 mb-4">
                   Cost Breakdown
                 </h2>
@@ -236,7 +242,7 @@ export default function ReportPage({ params }) {
             </div>
 
             {/* Right Column: Details */}
-            <div className="lg:col-span-2 bg-brand-off-white p-6 rounded-lg shadow">
+            <div className="lg:col-span-2 bg-brand-off-white p-6 rounded-lg shadow card-hover">
               <div className="flex border-b-2 border-brand-light-gray mb-6">
                 <button
                   onClick={() => setActiveTab("recommended")}
