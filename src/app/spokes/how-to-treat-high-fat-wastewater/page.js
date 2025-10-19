@@ -16,16 +16,23 @@ export default function HighFatWastewaterPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Clamp values to min/max to prevent invalid form submission
-    let clampedValue = Number(value);
-    if (name === "flow_rate_m3_hr") {
-      if (clampedValue > 500) clampedValue = 500;
-      if (clampedValue < 1) clampedValue = 1;
+
+    // ✅ FIX: Only convert numeric fields to Number, keep strings as strings
+    let clampedValue = value;
+
+    if (name === "flow_rate_m3_hr" || name === "tss_mg_l") {
+      clampedValue = Number(value);
+
+      if (name === "flow_rate_m3_hr") {
+        if (clampedValue > 500) clampedValue = 500;
+        if (clampedValue < 1) clampedValue = 1;
+      }
+      if (name === "tss_mg_l") {
+        if (clampedValue > 8000) clampedValue = 8000;
+        if (clampedValue < 100) clampedValue = 100;
+      }
     }
-    if (name === "tss_mg_l") {
-      if (clampedValue > 8000) clampedValue = 8000;
-      if (clampedValue < 100) clampedValue = 100;
-    }
+
     setFormData((prev) => ({ ...prev, [name]: clampedValue }));
   };
 
