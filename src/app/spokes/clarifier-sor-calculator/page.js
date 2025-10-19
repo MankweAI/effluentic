@@ -73,8 +73,8 @@ export default function ClarifierSorCalculatorPage() {
             Calculate Required Clarifier Area
           </h2>
           <p className="text-brand-steel mb-8">
-            Determine the footprint required based on your plant&apos;s hydraulic
-            load.
+            Determine the footprint required based on your plant&apos;s
+            hydraulic load.
           </p>
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-4">
@@ -111,7 +111,7 @@ export default function ClarifierSorCalculatorPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center bg-brand-navy text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300"
+              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300"
             >
               {isLoading ? (
                 <>

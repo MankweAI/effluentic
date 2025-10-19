@@ -2,6 +2,7 @@
 @import "tailwindcss/theme"; /* Add this line */
 @import "tailwindcss/utilities";
 
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 240, 240, 240;
