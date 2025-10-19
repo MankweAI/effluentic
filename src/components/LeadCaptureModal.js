@@ -61,8 +61,14 @@ export default function LeadCaptureModal({
   const buttonText = isReview ? "Submit Request" : "Send PDF to My Inbox";
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 fade-in">
       <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md m-4">
+        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4">
+          <div
+            className="bg-blue-600 h-1.5 rounded-full"
+            style={{ width: "100%" }}
+          ></div>
+        </div>
         <div className="flex justify-between items-start">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">{modalTitle}</h2>
@@ -142,4 +148,3 @@ export default function LeadCaptureModal({
     </div>
   );
 }
-

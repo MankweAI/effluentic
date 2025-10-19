@@ -55,7 +55,7 @@ export default function DafSizingCalculatorPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 md:py-12 max-w-4xl fade-in">
       <section className="text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-brand-navy">
           DAF Sizing & CAPEX Calculator
@@ -99,12 +99,17 @@ export default function DafSizingCalculatorPage() {
               </select>
             </div>
             <div className="space-y-4">
-              <label
-                htmlFor="flow_rate_m3_hr"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Flow Rate
-              </label>
+              <div className="has-tooltip">
+                <span className="tooltip rounded shadow-lg p-2 bg-gray-800 text-white -mt-8">
+                  The volumetric flow rate of wastewater to be treated.
+                </span>
+                <label
+                  htmlFor="flow_rate_m3_hr"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Flow Rate
+                </label>
+              </div>
               <div className="flex items-center space-x-4">
                 <input
                   type="range"
@@ -130,12 +135,18 @@ export default function DafSizingCalculatorPage() {
               </div>
             </div>
             <div className="space-y-4">
-              <label
-                htmlFor="tss_mg_l"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Suspended Solids (TSS)
-              </label>
+              <div className="has-tooltip">
+                <span className="tooltip rounded shadow-lg p-2 bg-gray-800 text-white -mt-8">
+                  Total Suspended Solids - the concentration of solid particles
+                  in the wastewater.
+                </span>
+                <label
+                  htmlFor="tss_mg_l"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Suspended Solids (TSS)
+                </label>
+              </div>
               <div className="flex items-center space-x-4">
                 <input
                   type="range"
@@ -163,7 +174,7 @@ export default function DafSizingCalculatorPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300"
+              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300 pulse"
             >
               {isLoading ? (
                 <>
