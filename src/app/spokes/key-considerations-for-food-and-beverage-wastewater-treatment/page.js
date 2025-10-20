@@ -1,25 +1,19 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "The Engineer's Guide to High-FOG Effluent",
+  title: "Key Considerations for Food & Beverage Wastewater Treatment",
   description:
-    "A senior process engineer provides a comprehensive overview of treating high-fat, oil, and grease (FOG) wastewater.",
-  videoPlaceholder: "Video: Treating High-FOG Effluent",
+    "A general guide for the F&B industry, covering common contaminants and the importance of primary treatment.",
+  videoPlaceholder: "Video: Food & Beverage Wastewater",
   calculatorConfig: {
-    title: "Get Your Baseline Data",
+    title: "General F&B DAF Sizer",
     description:
-      "Enter your plant's data to generate an instant pre-feasibility report for FOG treatment.",
+      "Get a baseline size and cost for a DAF system for a typical food and beverage application.",
     hiddenFields: {
+      industry: "food_beverage",
       contaminant_type: "Low-Density",
     },
     fields: [
-      {
-        name: "industry",
-        label: "Primary Industry",
-        type: "select",
-        options: ["food_beverage", "meat_processing", "dairy_processing"],
-        defaultValue: "food_beverage",
-      },
       {
         name: "flow_rate_m3_hr",
         label: "Flow Rate",
@@ -49,21 +43,17 @@ const pageConfig = {
   },
   relatedSpokes: [
     {
-      href: "/spokes/removing-emulsified-oils-from-industrial-wastewater",
-      title: "Removing Emulsified Oils from Industrial Wastewater",
+      href: "/spokes/guide-to-wastewater-treatment-in-the-meat-processing-industry",
+      title: "Wastewater Guide: Meat Processing",
     },
     {
-      href: "/spokes/guide-to-dissolved-air-flotation-for-fog-removal",
-      title: "Guide to DAF for FOG Removal",
+      href: "/spokes/dairy-processing-wastewater-challenges-and-solutions",
+      title: "Wastewater Guide: Dairy Processing",
     },
   ],
 };
 
 export default function Page() {
-  // NOTE: The SpokePage component is not fully generic yet.
-  // This is a simplified version for scaffolding.
-  // The select field type is not implemented in the generic component.
-  // We will address this in the next phase.
   return (
     <SpokePage
       title={pageConfig.title}

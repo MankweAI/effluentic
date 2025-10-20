@@ -17,14 +17,25 @@ export async function POST(request) {
       );
     }
 
-    const dafSpecs = calculateDafSizing(flow_rate_m3_hr, tss_mg_l, industry);
-    const clarifierSpecs = calculateClarifierSizing(flow_rate_m3_hr, industry);
+    // Ensure numeric types from the form submission
+    const numeric_flow_rate = Number(flow_rate_m3_hr);
+    const numeric_tss = Number(tss_mg_l);
+
+    const dafSpecs = calculateDafSizing(
+      numeric_flow_rate,
+      numeric_tss,
+      industry
+    );
+    const clarifierSpecs = calculateClarifierSizing(
+      numeric_flow_rate,
+      industry
+    );
 
     const reportData = {
       industry,
       contaminant_type,
-      flow_rate_m3_hr,
-      tss_mg_l,
+      flow_rate_m3_hr: numeric_flow_rate,
+      tss_mg_l: numeric_tss,
       daf_surface_area_m2: dafSpecs.surface_area_m2,
       daf_capex_min_zar: dafSpecs.capex_min_zar,
       daf_capex_max_zar: dafSpecs.capex_max_zar,
@@ -33,7 +44,7 @@ export async function POST(request) {
       clarifier_capex_min_zar: clarifierSpecs.capex_min_zar,
       clarifier_capex_max_zar: clarifierSpecs.capex_max_zar,
       clarifier_opex_annual_zar: clarifierSpecs.opex_annual_zar,
-      data_json: { dafSpecs, clarifierSpecs },
+      data_json: { dafSpecs, clarifierSpecs }, // Store detailed results
     };
 
     const { data, error } = await supabase
@@ -50,7 +61,6 @@ export async function POST(request) {
     return NextResponse.json(
       {
         reportId: data.id,
-        reportData: { ...reportData, id: data.id },
       },
       { status: 200 }
     );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation"; // Correct hook for accessing params
+import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import ReportSkeleton from "@/components/ReportSkeleton";
@@ -16,13 +16,48 @@ import { generatePdf } from "@/lib/pdfGenerator";
 const formatCurrency = (value) => {
   if (typeof value !== "number") return "N/A";
   return `R ${value.toLocaleString("en-ZA", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   })}`;
 };
 
+// Supplier Data
+const suppliers = [
+  {
+    name: "Veolia Water Technologies",
+    technologies: ["DAF", "Clarifier"],
+    url: "https://www.veolia.co.za/",
+  },
+  {
+    name: "A2V",
+    technologies: ["DAF", "Clarifier"],
+    url: "https://www.a2v.co.za/",
+  },
+  {
+    name: "PCI Africa",
+    technologies: ["DAF", "Clarifier"],
+    url: "https://pciafrica.com/",
+  },
+  {
+    name: "Xylem",
+    technologies: ["DAF", "Clarifier"],
+    url: "https://www.xylem.com/en-za/",
+  },
+  {
+    name: "Cube Consolidating",
+    technologies: ["Clarifier"],
+    url: "https://cubeconsolidating.com/",
+  },
+  {
+    name: "FLSmidth (EIMCO/Dorr-Oliver)",
+    technologies: ["Clarifier"],
+    url: "https://www.flsmidth.com/",
+  },
+  { name: "SIGMADAF", technologies: ["DAF"], url: "https://www.sigmadaf.com/" },
+];
+
 export default function ReportPage() {
-  const params = useParams(); // Standard way to get route params
+  const params = useParams();
   const { id } = params;
 
   const [report, setReport] = useState(null);
@@ -95,6 +130,10 @@ export default function ReportPage() {
   const alternativeTech =
     report.contaminant_type === "Low-Density" ? "Clarifier" : "DAF";
 
+  const relevantSuppliers = suppliers.filter((s) =>
+    s.technologies.includes(recommendedTech)
+  );
+
   const recommendedSpecs = {
     surfaceArea:
       recommendedTech === "DAF"
@@ -137,9 +176,7 @@ export default function ReportPage() {
     activeTab === "recommended" ? recommendedSpecs : alternativeSpecs;
   const activeTech =
     activeTab === "recommended" ? recommendedTech : alternativeTech;
-  
 
-  // **BUG FIX**: Calculate paybackPeriod and handle division by zero
   const paybackPeriod =
     recommendedSpecs.opexAnnual > 0
       ? (recommendedSpecs.capexMax / recommendedSpecs.opexAnnual).toFixed(1)
@@ -168,9 +205,11 @@ export default function ReportPage() {
         </header>
 
         <main className="container mx-auto px-4 py-8">
+          {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column: Summary */}
             <div className="lg:col-span-1 space-y-8">
+              {/* Input Parameters Card */}
               <div className="bg-brand-off-white p-6 rounded-lg shadow card-hover card-border-info">
                 <h2 className="text-xl font-bold text-brand-navy-dark border-b-2 border-brand-light-gray pb-2 mb-4">
                   Input Parameters
@@ -215,6 +254,7 @@ export default function ReportPage() {
                   </ul>
                 </ul>
               </div>
+              {/* Cost Breakdown Card */}
               <div className="bg-brand-off-white p-6 rounded-lg shadow card-hover card-border-success">
                 <h2 className="text-xl font-bold text-brand-navy-dark border-b-2 border-brand-light-gray pb-2 mb-4">
                   Cost Breakdown
@@ -258,27 +298,9 @@ export default function ReportPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                   {/* Surface Area */}
                   <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-brand-steel-dark">
-                        Required Surface Area
-                      </p>
-                      <span className="inline-flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M4 6h16M4 12h16M4 18h16"
-                          />
-                        </svg>
-                      </span>
-                    </div>
+                    <p className="text-sm font-medium text-brand-steel-dark">
+                      Required Surface Area
+                    </p>
                     <p className="mt-3 text-3xl font-bold text-brand-navy">
                       {activeSpecs.surfaceArea}{" "}
                       <span className="text-base text-brand-steel-dark">
@@ -289,14 +311,9 @@ export default function ReportPage() {
 
                   {/* Annual OPEX */}
                   <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-brand-steel-dark">
-                        Estimated Annual OPEX
-                      </p>
-                      <span className="inline-flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full">
-                        💰
-                      </span>
-                    </div>
+                    <p className="text-sm font-medium text-brand-steel-dark">
+                      Estimated Annual OPEX
+                    </p>
                     <p className="mt-3 text-3xl font-bold text-brand-navy">
                       {formatCurrency(activeSpecs.opexAnnual)}
                     </p>
@@ -304,14 +321,9 @@ export default function ReportPage() {
 
                   {/* CAPEX Range */}
                   <div className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 md:col-span-2">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-brand-steel-dark">
-                        Budget CAPEX Range
-                      </p>
-                      <span className="inline-flex items-center justify-center w-8 h-8 bg-amber-100 text-amber-600 rounded-full">
-                        🏗️
-                      </span>
-                    </div>
+                    <p className="text-sm font-medium text-brand-steel-dark">
+                      Budget CAPEX Range
+                    </p>
                     <p className="mt-3 text-3xl font-bold text-brand-navy">
                       {formatCurrency(activeSpecs.capexMin)}{" "}
                       <span className="text-lg text-brand-steel-dark">–</span>{" "}
@@ -325,11 +337,45 @@ export default function ReportPage() {
               </div>
             </div>
           </div>
-          <div className="mt-10 bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300">
+
+          {/* CTA Section */}
+          <div className="mt-10 bg-brand-navy-dark p-8 rounded-2xl shadow-lg text-center">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              Ready for the Next Step?
+            </h2>
+            <p className="text-brand-steel-light mb-6 max-w-2xl mx-auto">
+              Get a detailed, engineer-reviewed version of this report sent
+              directly to your inbox. This is a free, no-obligation service to
+              help you validate your project parameters.
+            </p>
+            {formSubmitted ? (
+              <div
+                className="bg-green-100 border-l-4 border-brand-action-green text-green-800 p-4 rounded-lg shadow-md max-w-2xl mx-auto text-left"
+                role="alert"
+              >
+                <p className="font-bold">Thank You!</p>
+                <p>
+                  Your submission has been received. Our engineering partner
+                  will be in touch shortly. Your PDF download will begin if
+                  requested.
+                </p>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleOpenModal("review")}
+                className="bg-brand-action-green text-brand-navy-dark font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-all duration-300 transform hover:scale-105"
+              >
+                Review & Send To Me As PDF
+              </button>
+            )}
+          </div>
+
+          {/* Supplier Directory */}
+          <div className="mt-10 bg-white p-8 rounded-2xl shadow-md border border-gray-100">
             <h2 className="text-2xl font-bold text-brand-navy-dark flex items-center gap-2 border-b border-gray-200 pb-3 mb-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-brand-navy-dark"
+                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -338,88 +384,47 @@ export default function ReportPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v12a2 2 0 01-2 2z"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                 />
               </svg>
-              Commentary
+              {recommendedTech} Equipment Suppliers (South Africa)
             </h2>
-
-            <div className="prose max-w-none text-brand-steel-dark leading-relaxed space-y-6">
-              <p className="text-base">
-                The estimates provided are for pre-feasibility purposes and are
-                based on the inputs supplied and typical industry design
-                parameters. A detailed engineering review is strongly
-                recommended before preparing a formal proposal.
-              </p>
-
-              <section>
-                <h4 className="text-lg font-semibold text-brand-navy-dark border-l-4 border-blue-500 pl-3 mb-2">
-                  Technology Recommendation
-                </h4>
-                <p>
-                  A <strong>{recommendedTech}</strong> system is recommended
-                  based on the{" "}
-                  <strong>{report.contaminant_type.toLowerCase()}</strong>{" "}
-                  nature of the contaminants. This technology provides the most
-                  efficient and cost-effective solution for this application. An
-                  alternative option, <strong>{alternativeTech}</strong>, would
-                  likely result in lower performance and a larger footprint.
-                </p>
-              </section>
-
-              <section>
-                <h4 className="text-lg font-semibold text-brand-navy-dark border-l-4 border-green-500 pl-3 mb-2">
-                  Financials
-                </h4>
-                <p>
-                  The estimated payback period of approximately{" "}
-                  <strong>{paybackPeriod} years</strong> is derived from a
-                  simplified model and does not account for variables such as
-                  cost of capital, depreciation, or potential revenue from
-                  recovered resources. The cost per cubic meter of treated water
-                  remains a key performance indicator of operational efficiency.
-                </p>
-              </section>
-
-              <section>
-                <h4 className="text-lg font-semibold text-brand-navy-dark border-l-4 border-amber-500 pl-3 mb-2">
-                  Next Steps
-                </h4>
-                <p>
-                  We recommend a comprehensive engineering review to refine
-                  these estimates and develop a formal proposal. This should
-                  include detailed evaluations of site-specific factors such as
-                  civil works, electrical infrastructure, and automation
-                  requirements.
-                </p>
-              </section>
+            <p className="text-sm text-brand-steel mb-6">
+              The following is a list of potential equipment suppliers for the
+              recommended technology. Effluentic is an independent platform and
+              does not endorse any specific supplier.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {relevantSuppliers.map((supplier) => (
+                <a
+                  href={supplier.url}
+                  key={supplier.name}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 hover:border-blue-500 transition-all duration-200"
+                >
+                  <span className="font-semibold text-brand-navy">
+                    {supplier.name}
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 ml-auto text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                </a>
+              ))}
             </div>
           </div>
         </main>
-        {formSubmitted ? (
-          <div
-            className="bg-green-100 border-l-4 border-brand-action-green text-green-700 p-4 rounded-lg shadow-md mb-8"
-            role="alert"
-          >
-            <p className="font-bold">Thank You!</p>
-            <p>
-              Your submission has been received. If you requested a review, our
-              team will be in touch shortly. Your PDF download has started if
-              requested.
-            </p>
-          </div>
-        ) : (
-          <div className="bg-brand-off-white p-6 rounded-lg shadow-md mb-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <button
-                onClick={() => handleOpenModal("review")}
-                className="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105"
-              >
-                Review & Send To Me As PDF
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

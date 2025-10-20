@@ -1,14 +1,14 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "The Engineer's Guide to High-FOG Effluent",
+  title: "DAF System Costs: A CAPEX and OPEX Breakdown",
   description:
-    "A senior process engineer provides a comprehensive overview of treating high-fat, oil, and grease (FOG) wastewater.",
-  videoPlaceholder: "Video: Treating High-FOG Effluent",
+    "Understand the costs associated with a DAF system, from initial investment to ongoing operational expenses.",
+  videoPlaceholder: "Video: DAF Cost Analysis",
   calculatorConfig: {
-    title: "Get Your Baseline Data",
+    title: "Budgetary DAF Cost Calculator",
     description:
-      "Enter your plant's data to generate an instant pre-feasibility report for FOG treatment.",
+      "Generate a Class 4 cost estimate for a DAF system based on your flow and solids load.",
     hiddenFields: {
       contaminant_type: "Low-Density",
     },
@@ -49,21 +49,17 @@ const pageConfig = {
   },
   relatedSpokes: [
     {
-      href: "/spokes/removing-emulsified-oils-from-industrial-wastewater",
-      title: "Removing Emulsified Oils from Industrial Wastewater",
+      href: "/spokes/daf-sizing-calculator-and-key-design-parameters",
+      title: "DAF Sizing Calculator & Design Parameters",
     },
     {
-      href: "/spokes/guide-to-dissolved-air-flotation-for-fog-removal",
-      title: "Guide to DAF for FOG Removal",
+      href: "/spokes/how-to-optimize-chemical-dosage-for-daf-systems",
+      title: "How to Optimize Chemical Dosage for DAF",
     },
   ],
 };
 
 export default function Page() {
-  // NOTE: The SpokePage component is not fully generic yet.
-  // This is a simplified version for scaffolding.
-  // The select field type is not implemented in the generic component.
-  // We will address this in the next phase.
   return (
     <SpokePage
       title={pageConfig.title}

@@ -1,14 +1,14 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "The Engineer's Guide to High-FOG Effluent",
+  title: "Using a DAF System for Low-Density Solids Removal",
   description:
-    "A senior process engineer provides a comprehensive overview of treating high-fat, oil, and grease (FOG) wastewater.",
-  videoPlaceholder: "Video: Treating High-FOG Effluent",
+    "Learn how Dissolved Air Flotation is used to effectively remove buoyant organic solids and other low-density contaminants.",
+  videoPlaceholder: "Video: DAF for Organic Solids",
   calculatorConfig: {
-    title: "Get Your Baseline Data",
+    title: "DAF Sizing Calculator",
     description:
-      "Enter your plant's data to generate an instant pre-feasibility report for FOG treatment.",
+      "Size a DAF system based on hydraulic and solids loading rates for organic solids.",
     hiddenFields: {
       contaminant_type: "Low-Density",
     },
@@ -38,8 +38,7 @@ const pageConfig = {
         max: 8000,
         step: 100,
         defaultValue: 1200,
-        tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+        tooltip: "The concentration of low-density suspended solids.",
       },
     ],
   },
@@ -49,21 +48,17 @@ const pageConfig = {
   },
   relatedSpokes: [
     {
-      href: "/spokes/removing-emulsified-oils-from-industrial-wastewater",
-      title: "Removing Emulsified Oils from Industrial Wastewater",
+      href: "/spokes/treating-high-density-vs-low-density-suspended-solids",
+      title: "Treating High-Density vs. Low-Density Solids",
     },
     {
-      href: "/spokes/guide-to-dissolved-air-flotation-for-fog-removal",
-      title: "Guide to DAF for FOG Removal",
+      href: "/spokes/daf-sizing-calculator-and-key-design-parameters",
+      title: "DAF Sizing Calculator & Design Parameters",
     },
   ],
 };
 
 export default function Page() {
-  // NOTE: The SpokePage component is not fully generic yet.
-  // This is a simplified version for scaffolding.
-  // The select field type is not implemented in the generic component.
-  // We will address this in the next phase.
   return (
     <SpokePage
       title={pageConfig.title}

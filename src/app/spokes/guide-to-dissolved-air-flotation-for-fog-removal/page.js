@@ -1,14 +1,14 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "The Engineer's Guide to High-FOG Effluent",
+  title: "A Guide to Dissolved Air Flotation (DAF) for FOG Removal",
   description:
-    "A senior process engineer provides a comprehensive overview of treating high-fat, oil, and grease (FOG) wastewater.",
-  videoPlaceholder: "Video: Treating High-FOG Effluent",
+    "Learn the principles of DAF technology and why it is the superior method for removing fats, oils, and grease from industrial effluent.",
+  videoPlaceholder: "Video: DAF for FOG Explained",
   calculatorConfig: {
-    title: "Get Your Baseline Data",
+    title: "DAF Sizing for FOG",
     description:
-      "Enter your plant's data to generate an instant pre-feasibility report for FOG treatment.",
+      "Enter your parameters to get a preliminary size and cost estimate for a DAF system.",
     hiddenFields: {
       contaminant_type: "Low-Density",
     },
@@ -38,8 +38,7 @@ const pageConfig = {
         max: 8000,
         step: 100,
         defaultValue: 1200,
-        tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+        tooltip: "Total Suspended Solids, including FOG content.",
       },
     ],
   },
@@ -49,21 +48,17 @@ const pageConfig = {
   },
   relatedSpokes: [
     {
-      href: "/spokes/removing-emulsified-oils-from-industrial-wastewater",
-      title: "Removing Emulsified Oils from Industrial Wastewater",
+      href: "/spokes/how-to-treat-high-fat-wastewater",
+      title: "How to Treat High-Fat Wastewater",
     },
     {
-      href: "/spokes/guide-to-dissolved-air-flotation-for-fog-removal",
-      title: "Guide to DAF for FOG Removal",
+      href: "/spokes/daf-vs-oil-water-separators-for-fog",
+      title: "DAF vs. Oil-Water Separators for FOG",
     },
   ],
 };
 
 export default function Page() {
-  // NOTE: The SpokePage component is not fully generic yet.
-  // This is a simplified version for scaffolding.
-  // The select field type is not implemented in the generic component.
-  // We will address this in the next phase.
   return (
     <SpokePage
       title={pageConfig.title}

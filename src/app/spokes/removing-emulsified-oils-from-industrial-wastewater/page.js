@@ -1,14 +1,14 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "The Engineer's Guide to High-FOG Effluent",
+  title: "Breaking Stable Oil Emulsions in Wastewater",
   description:
-    "A senior process engineer provides a comprehensive overview of treating high-fat, oil, and grease (FOG) wastewater.",
-  videoPlaceholder: "Video: Treating High-FOG Effluent",
+    "An advanced technical overview on treating stable oil-in-water emulsions, covering both chemical and mechanical separation steps.",
+  videoPlaceholder: "Video: The Advanced Technical Advisor",
   calculatorConfig: {
-    title: "Get Your Baseline Data",
+    title: "Size Your Flotation System",
     description:
-      "Enter your plant's data to generate an instant pre-feasibility report for FOG treatment.",
+      "This calculator models the mechanical separation (DAF) stage. Your chemical program is a critical upstream requirement.",
     hiddenFields: {
       contaminant_type: "Low-Density",
     },
@@ -49,21 +49,17 @@ const pageConfig = {
   },
   relatedSpokes: [
     {
-      href: "/spokes/removing-emulsified-oils-from-industrial-wastewater",
-      title: "Removing Emulsified Oils from Industrial Wastewater",
+      href: "/spokes/how-to-treat-high-fat-wastewater",
+      title: "How to Treat High-Fat Wastewater",
     },
     {
-      href: "/spokes/guide-to-dissolved-air-flotation-for-fog-removal",
-      title: "Guide to DAF for FOG Removal",
+      href: "/spokes/chemical-treatment-options-for-breaking-oil-emulsions",
+      title: "Chemical Treatment for Oil Emulsions",
     },
   ],
 };
 
 export default function Page() {
-  // NOTE: The SpokePage component is not fully generic yet.
-  // This is a simplified version for scaffolding.
-  // The select field type is not implemented in the generic component.
-  // We will address this in the next phase.
   return (
     <SpokePage
       title={pageConfig.title}

@@ -1,14 +1,14 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "The Engineer's Guide to High-FOG Effluent",
+  title: "Chemical Treatment Options for Breaking Oil Emulsions",
   description:
-    "A senior process engineer provides a comprehensive overview of treating high-fat, oil, and grease (FOG) wastewater.",
-  videoPlaceholder: "Video: Treating High-FOG Effluent",
+    "Explore the use of coagulants and flocculants in destabilizing oil-in-water emulsions prior to mechanical separation.",
+  videoPlaceholder: "Video: Chemical Emulsion Breaking",
   calculatorConfig: {
-    title: "Get Your Baseline Data",
+    title: "Estimate Chemical Dosage",
     description:
-      "Enter your plant's data to generate an instant pre-feasibility report for FOG treatment.",
+      "This calculator provides a rough estimate for coagulant demand based on your inputs.",
     hiddenFields: {
       contaminant_type: "Low-Density",
     },
@@ -32,14 +32,13 @@ const pageConfig = {
       },
       {
         name: "tss_mg_l",
-        label: "Suspended Solids (TSS)",
+        label: "FOG & TSS Concentration",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
-        defaultValue: 1200,
-        tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+        defaultValue: 1500,
+        tooltip: "The combined concentration of fats, oils, grease and solids.",
       },
     ],
   },
@@ -53,17 +52,13 @@ const pageConfig = {
       title: "Removing Emulsified Oils from Industrial Wastewater",
     },
     {
-      href: "/spokes/guide-to-dissolved-air-flotation-for-fog-removal",
-      title: "Guide to DAF for FOG Removal",
+      href: "/spokes/how-to-optimize-chemical-dosage-for-daf-systems",
+      title: "How to Optimize Chemical Dosage for DAF",
     },
   ],
 };
 
 export default function Page() {
-  // NOTE: The SpokePage component is not fully generic yet.
-  // This is a simplified version for scaffolding.
-  // The select field type is not implemented in the generic component.
-  // We will address this in the next phase.
   return (
     <SpokePage
       title={pageConfig.title}
