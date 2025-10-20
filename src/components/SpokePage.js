@@ -165,14 +165,18 @@ export default function SpokePage({
                   </div>
                 );
               }
-              return (
-                <CalculatorInput
-                  key={field.name}
-                  field={field}
-                  value={formData[field.name]}
-                  onChange={handleInputChange}
-                />
-              );
+              if (field.name) {
+                // Render CalculatorInput only if field.name is defined
+                return (
+                  <CalculatorInput
+                    key={field.name}
+                    field={field}
+                    value={formData[field.name]}
+                    onChange={handleInputChange}
+                  />
+                );
+              }
+              return null;
             })}
             <button
               type="submit"
