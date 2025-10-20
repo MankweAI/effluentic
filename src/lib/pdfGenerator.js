@@ -32,6 +32,15 @@ export function generatePdf(reportData) {
         : reportData.clarifier_opex_annual_zar,
   };
 
+  const paybackPeriod = (
+    recommendedSpecs.capexMax /
+    (recommendedSpecs.opexAnnual * 0.2)
+  ).toFixed(1);
+  const costPerM3 = (
+    recommendedSpecs.opexAnnual /
+    (reportData.flow_rate_m3_hr * 24 * 365)
+  ).toFixed(2);
+
   // Header
   doc.setFontSize(22);
   doc.setTextColor(40, 40, 40);
@@ -52,7 +61,7 @@ export function generatePdf(reportData) {
       [{ content: `Contaminant Type: ${reportData.contaminant_type}` }],
     ],
     theme: "grid",
-    headStyles: { fillColor: [22, 163, 74] },
+    headStyles: { fillColor: [37, 99, 235] },
   });
 
   // Recommendations & Budget
@@ -69,8 +78,30 @@ export function generatePdf(reportData) {
       [`Estimated Annual OPEX: ${formatCurrency(recommendedSpecs.opexAnnual)}`],
     ],
     theme: "grid",
-    headStyles: { fillColor: [37, 99, 235] },
+    headStyles: { fillColor: [22, 163, 74] },
   });
+
+  // Key Metrics
+  doc.autoTable({
+    startY: doc.lastAutoTable.finalY + 10,
+    head: [["Key Metrics & Ratios"]],
+    body: [
+      [`Payback Period: ~${paybackPeriod} Years`],
+      [`Cost per m³ Treated: R ${costPerM3}`],
+    ],
+    theme: "grid",
+    headStyles: { fillColor: [245, 158, 11] },
+  });
+
+  // Commentary
+  doc.setFontSize(12);
+  doc.setTextColor(40, 40, 40);
+  doc.text("Commentary", 14, doc.lastAutoTable.finalY + 15);
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  const commentaryText = `The data presented in this report is intended to provide a high-level overview for pre-feasibility studies. The CAPEX and OPEX figures are budgetary and based on industry-standard design parameters. The primary recommendation of a ${recommendedTech} system is based on your selection of ${reportData.contaminant_type} contaminants. For a more detailed analysis, a full engineering review is recommended.`;
+  const splitText = doc.splitTextToSize(commentaryText, 180);
+  doc.text(splitText, 14, doc.lastAutoTable.finalY + 22);
 
   // Footer
   doc.setFontSize(8);
@@ -92,4 +123,3 @@ export function generatePdf(reportData) {
 
   doc.save(`EffluentLogic_Report_${reportData.id.substring(0, 8)}.pdf`);
 }
-

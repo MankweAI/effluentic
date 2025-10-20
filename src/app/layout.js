@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "EffluentLogic - Wastewater Treatment Sizing Tool",
+  title: "Effluentic - Wastewater Treatment Sizing Tool",
   description:
     "Instant pre-feasibility reports for industrial wastewater treatment systems.",
 };
@@ -45,7 +45,7 @@ function Header() {
           />
         </svg>
         <h1 className="text-xl font-bold text-brand-navy ml-3">
-          EffluentLogic
+          Effluentic
         </h1>
       </nav>
     </header>
@@ -57,7 +57,7 @@ function Footer() {
     <footer className="py-8 mt-16 border-t border-gray-200">
       <div className="container mx-auto px-6 text-center text-brand-steel text-sm">
         <p>
-          &copy; {new Date().getFullYear()} EffluentLogic. All rights reserved.
+          &copy; {new Date().getFullYear()} Effluent. All rights reserved.
         </p>
         <p className="mt-2">For Engineering Professionals in South Africa</p>
       </div>

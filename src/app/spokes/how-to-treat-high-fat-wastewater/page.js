@@ -14,28 +14,23 @@ export default function HighFatWastewaterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  let processedValue = value;
 
-    // ✅ FIX: Only convert numeric fields to Number, keep strings as strings
-    let clampedValue = value;
-
-    if (name === "flow_rate_m3_hr" || name === "tss_mg_l") {
-      clampedValue = Number(value);
-
-      if (name === "flow_rate_m3_hr") {
-        if (clampedValue > 500) clampedValue = 500;
-        if (clampedValue < 1) clampedValue = 1;
-      }
-      if (name === "tss_mg_l") {
-        if (clampedValue > 8000) clampedValue = 8000;
-        if (clampedValue < 100) clampedValue = 100;
-      }
+  if (name === "flow_rate_m3_hr" || name === "tss_mg_l") {
+    processedValue = Number(value);
+    if (name === "flow_rate_m3_hr") {
+      if (processedValue > 500) processedValue = 500; // Correct max value
+      if (processedValue < 1) processedValue = 1;
     }
-
-    setFormData((prev) => ({ ...prev, [name]: clampedValue }));
-  };
-
+    if (name === "tss_mg_l") {
+      if (processedValue > 8000) processedValue = 8000;
+      if (processedValue < 100) processedValue = 100;
+    }
+  }
+  setFormData((prev) => ({ ...prev, [name]: processedValue }));
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -83,16 +78,17 @@ export default function HighFatWastewaterPage() {
 
       {/* --- Section 2: Calculator --- */}
       <section className="mt-16">
-        <div className="bg-brand-off-white p-8 md:p-10 rounded-lg shadow-lg border border-gray-200 max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-brand-navy mb-2">
+        <div className="bg-brand-off-white p-8 md:p-10 rounded-xl shadow-xl border border-gray-200 max-w-2xl mx-auto transition-all duration-300 hover:shadow-2xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-brand-navy mb-3">
             Get Your Baseline Data
           </h2>
-          <p className="text-brand-steel mb-8">
+          <p className="text-brand-steel mb-8 text-sm md:text-base">
             Enter your plant&apos;s data to generate an instant pre-feasibility
             report.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Industry Select */}
             <div>
               <label
                 htmlFor="industry"
@@ -105,7 +101,7 @@ export default function HighFatWastewaterPage() {
                 name="industry"
                 value={formData.industry}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-4 py-3 bg-brand-light-gray border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-navy focus:border-brand-navy"
+                className="mt-1 block w-full px-4 py-3 bg-brand-light-gray border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-brand-navy transition"
               >
                 <option value="food_beverage">Food & Beverage</option>
                 <option value="meat_processing">Meat Processing</option>
@@ -113,18 +109,17 @@ export default function HighFatWastewaterPage() {
               </select>
             </div>
 
-            <div className="space-y-4">
-              <div className="has-tooltip">
-                <span className="tooltip rounded shadow-lg p-2 bg-gray-800 text-white -mt-8">
-                  The volumetric flow rate of wastewater to be treated.
-                </span>
-                <label
-                  htmlFor="flow_rate_m3_hr"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Flow Rate
-                </label>
-              </div>
+            {/* Flow Rate */}
+            <div className="space-y-2 relative group">
+              <label
+                htmlFor="flow_rate_m3_hr"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Flow Rate
+              </label>
+              <span className="absolute left-0 -top-6 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 text-xs bg-gray-800 text-white p-2 rounded shadow-lg pointer-events-none z-10">
+                The volumetric flow rate of wastewater to be treated.
+              </span>
               <div className="flex items-center space-x-4">
                 <input
                   type="range"
@@ -135,7 +130,7 @@ export default function HighFatWastewaterPage() {
                   step="1"
                   value={formData.flow_rate_m3_hr}
                   onChange={handleInputChange}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-brand-navy"
                 />
                 <div className="flex items-center">
                   <input
@@ -143,26 +138,25 @@ export default function HighFatWastewaterPage() {
                     name="flow_rate_m3_hr"
                     value={formData.flow_rate_m3_hr}
                     onChange={handleInputChange}
-                    className="w-24 font-mono text-right bg-brand-light-gray border border-gray-300 rounded-md px-2 py-1"
+                    className="w-24 font-mono text-right bg-brand-light-gray border border-gray-300 rounded-md px-2 py-1 focus:ring-1 focus:ring-brand-navy focus:outline-none"
                   />
                   <span className="ml-2 text-brand-steel">m³/hr</span>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="has-tooltip">
-                <span className="tooltip rounded shadow-lg p-2 bg-gray-800 text-white -mt-8">
-                  Total Suspended Solids - the concentration of solid particles
-                  in the wastewater.
-                </span>
-                <label
-                  htmlFor="tss_mg_l"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Suspended Solids (TSS)
-                </label>
-              </div>
+            {/* TSS */}
+            <div className="space-y-2 relative group">
+              <label
+                htmlFor="tss_mg_l"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Suspended Solids (TSS)
+              </label>
+              <span className="absolute left-0 -top-6 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 text-xs bg-gray-800 text-white p-2 rounded shadow-lg pointer-events-none z-10">
+                Total Suspended Solids - the concentration of solid particles in
+                the wastewater.
+              </span>
               <div className="flex items-center space-x-4">
                 <input
                   type="range"
@@ -173,7 +167,7 @@ export default function HighFatWastewaterPage() {
                   step="100"
                   value={formData.tss_mg_l}
                   onChange={handleInputChange}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-brand-navy"
                 />
                 <div className="flex items-center">
                   <input
@@ -181,17 +175,18 @@ export default function HighFatWastewaterPage() {
                     name="tss_mg_l"
                     value={formData.tss_mg_l}
                     onChange={handleInputChange}
-                    className="w-24 font-mono text-right bg-brand-light-gray border border-gray-300 rounded-md px-2 py-1"
+                    className="w-24 font-mono text-right bg-brand-light-gray border border-gray-300 rounded-md px-2 py-1 focus:ring-1 focus:ring-brand-navy focus:outline-none"
                   />
                   <span className="ml-2 text-brand-steel">mg/L</span>
                 </div>
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300 pulse"
+              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-95 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300"
             >
               {isLoading ? (
                 <>

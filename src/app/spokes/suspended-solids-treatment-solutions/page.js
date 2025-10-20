@@ -23,21 +23,23 @@ export default function SuspendedSolidsPage() {
     }
   }, [formData.contaminant_type]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let clampedValue =
-      name.includes("flow") || name.includes("tss") ? Number(value) : value;
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  let processedValue = value;
 
+  if (name === "flow_rate_m3_hr" || name === "tss_mg_l") {
+    processedValue = Number(value);
     if (name === "flow_rate_m3_hr") {
-      if (clampedValue > 2000) clampedValue = 2000;
-      if (clampedValue < 1) clampedValue = 1;
+      if (processedValue > 2000) processedValue = 2000; // Correct max value
+      if (processedValue < 1) processedValue = 1;
     }
     if (name === "tss_mg_l") {
-      if (clampedValue > 8000) clampedValue = 8000;
-      if (clampedValue < 100) clampedValue = 100;
+      if (processedValue > 8000) processedValue = 8000;
+      if (processedValue < 100) processedValue = 100;
     }
-    setFormData((prev) => ({ ...prev, [name]: clampedValue }));
-  };
+  }
+  setFormData((prev) => ({ ...prev, [name]: processedValue }));
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -226,7 +228,7 @@ export default function SuspendedSolidsPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300 pulse"
+              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300"
             >
               {isLoading ? (
                 <>

@@ -14,15 +14,15 @@ export default function ClarifierSorCalculatorPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let clampedValue = Number(value);
-    if (name === "flow_rate_m3_hr") {
-      if (clampedValue > 2000) clampedValue = 2000;
-      if (clampedValue < 10) clampedValue = 10;
-    }
-    setFormData((prev) => ({ ...prev, [name]: clampedValue }));
-  };
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  let clampedValue = Number(value);
+  if (name === "flow_rate_m3_hr") {
+    if (clampedValue > 2000) clampedValue = 2000; // Correct max value
+    if (clampedValue < 10) clampedValue = 10; // Correct min value
+  }
+  setFormData((prev) => ({ ...prev, [name]: clampedValue }));
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,7 +116,7 @@ export default function ClarifierSorCalculatorPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300 pulse"
+              className="w-full flex items-center justify-center bg-[#0A2540] text-white font-bold py-4 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy disabled:bg-brand-steel transition-all duration-300"
             >
               {isLoading ? (
                 <>
