@@ -6,15 +6,33 @@ const pageConfig = {
     "A comparison of high-rate, inclined plate settlers and traditional gravity clarifiers, looking at footprint, cost, and performance.",
   videoPlaceholder: "Video: Lamella vs. Conventional Clarifiers",
   calculatorConfig: {
-    title: "Footprint Comparison Calculator",
+    title: "Clarifier Sizing (Footprint Comparison)",
     description:
-      "See the potential space savings of a lamella clarifier for your flow rate.",
+      "Calculate the required surface area for a conventional clarifier based on SOR. Lamella units typically offer significant footprint reduction.",
+    // Focus is clarifier sizing, commentary can discuss lamella benefits
     hiddenFields: {
-      industry: "mining_beneficiation",
+      conceptFocus: "clarifier_sizing",
       contaminant_type: "High-Density",
-      tss_mg_l: 5000,
+      // tss_mg_l: 5000, // Not needed for SOR calc
     },
     fields: [
+      {
+        name: "industry",
+        label: "Primary Industry",
+        type: "select",
+        // Options relevant to High-Density / Clarifier applications
+        options: [
+          { value: "mining_beneficiation", label: "Mining & Beneficiation" },
+          // Add other relevant high-density industries if applicable (e.g., Heavy Industry, Power Generation Ash)
+          { value: "heavy_industry_metals", label: "Heavy Industry / Metals" },
+          {
+            value: "aggregate_sand_washing",
+            label: "Aggregate / Sand Washing",
+          },
+        ],
+        defaultValue: "mining_beneficiation",
+        tooltip: "Select the industry that best matches your application.",
+      },
       {
         name: "flow_rate_m3_hr",
         label: "Process Flow Rate",
@@ -23,8 +41,10 @@ const pageConfig = {
         max: 2000,
         step: 10,
         defaultValue: 150,
-        tooltip: "The volumetric flow rate of wastewater to be treated.",
+        tooltip:
+          "The volumetric flow rate determines conventional clarifier area via SOR.",
       },
+      // Could add a conceptual output in the report comparing footprint savings
     ],
   },
   hubLink: {

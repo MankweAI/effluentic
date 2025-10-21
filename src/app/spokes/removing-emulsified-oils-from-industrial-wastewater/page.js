@@ -1,15 +1,16 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "Breaking Stable Oil Emulsions in Wastewater",
+  title: "A Guide to Dissolved Air Flotation (DAF) for FOG Removal",
   description:
-    "An advanced technical overview on treating stable oil-in-water emulsions, covering both chemical and mechanical separation steps.",
-  videoPlaceholder: "Video: The Advanced Technical Advisor",
+    "Learn the principles of DAF technology and why it is the superior method for removing fats, oils, and grease from industrial effluent.",
+  videoPlaceholder: "Video: DAF for FOG Explained",
   calculatorConfig: {
-    title: "Size Your Flotation System",
+    title: "DAF Sizing for FOG",
     description:
-      "This calculator models the mechanical separation (DAF) stage. Your chemical program is a critical upstream requirement.",
+      "Enter your parameters to get a preliminary size and cost estimate for a DAF system specifically targeting FOG.",
     hiddenFields: {
+      conceptFocus: "daf_sizing", // Explicitly DAF Sizing focus
       contaminant_type: "Low-Density",
     },
     fields: [
@@ -17,8 +18,15 @@ const pageConfig = {
         name: "industry",
         label: "Primary Industry",
         type: "select",
-        options: ["food_beverage", "meat_processing", "dairy_processing"],
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
         defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
       },
       {
         name: "flow_rate_m3_hr",
@@ -28,18 +36,17 @@ const pageConfig = {
         max: 500,
         step: 1,
         defaultValue: 50,
-        tooltip: "The volumetric flow rate of wastewater to be treated.",
+        tooltip: "The volumetric flow rate of wastewater (HLR).",
       },
       {
-        name: "tss_mg_l",
-        label: "Suspended Solids (TSS)",
+        name: "tss_mg_l", // Includes FOG
+        label: "FOG & TSS Concentration",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1200,
-        tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+        tooltip: "Total Suspended Solids, including FOG content (SLR).",
       },
     ],
   },
@@ -53,8 +60,8 @@ const pageConfig = {
       title: "How to Treat High-Fat Wastewater",
     },
     {
-      href: "/spokes/chemical-treatment-options-for-breaking-oil-emulsions",
-      title: "Chemical Treatment for Oil Emulsions",
+      href: "/spokes/daf-vs-oil-water-separators-for-fog",
+      title: "DAF vs. Oil-Water Separators for FOG",
     },
   ],
 };

@@ -6,25 +6,44 @@ const pageConfig = {
     "Understand the difference between coagulants and flocculants and their role in enhancing gravity settling.",
   videoPlaceholder: "Video: Coagulation & Flocculation",
   calculatorConfig: {
-    title: "Jar Test Simulator",
+    title: "Chemical Dose Estimation (Sedimentation)",
     description:
-      "A conceptual tool to understand how chemical dosage impacts settling.",
+      "Estimate typical chemical dosage needs for enhancing sedimentation based on solids.",
     hiddenFields: {
-      industry: "mining_beneficiation",
+      conceptFocus: "chemical_dosing", // Focus on chemicals for sedimentation
       contaminant_type: "High-Density",
-      flow_rate_m3_hr: 100,
+      flow_rate_m3_hr: 100, // Example flow rate needed for cost estimation context
     },
     fields: [
       {
+        name: "industry",
+        label: "Primary Industry",
+        type: "select",
+        // Options relevant to High-Density / Clarifier applications
+        options: [
+          { value: "mining_beneficiation", label: "Mining & Beneficiation" },
+          // Add other relevant high-density industries if applicable (e.g., Heavy Industry, Power Generation Ash)
+          { value: "heavy_industry_metals", label: "Heavy Industry / Metals" },
+          {
+            value: "aggregate_sand_washing",
+            label: "Aggregate / Sand Washing",
+          },
+        ],
+        defaultValue: "mining_beneficiation",
+        tooltip: "Select the industry that best matches your application.",
+      },
+      {
         name: "tss_mg_l",
-        label: "Initial TSS",
+        label: "Influent TSS",
         unit: "mg/L",
         min: 500,
-        max: 10000,
+        max: 20000, // Mining range
         step: 100,
-        defaultValue: 2000,
-        tooltip: "Initial solids concentration.",
+        defaultValue: 4000, // Higher default for mining
+        tooltip:
+          "Initial solids concentration influencing flocculant/coagulant demand.",
       },
+      // Could add water type (e.g., Process Water, Tailings) if logic becomes more complex
     ],
   },
   hubLink: {

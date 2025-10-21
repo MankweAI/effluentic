@@ -6,14 +6,29 @@ const pageConfig = {
     "A general guide for the F&B industry, covering common contaminants and the importance of primary treatment.",
   videoPlaceholder: "Video: Food & Beverage Wastewater",
   calculatorConfig: {
-    title: "General F&B DAF Sizer",
+    title: "General F&B DAF & Load Estimator",
     description:
-      "Get a baseline size and cost for a DAF system for a typical food and beverage application.",
+      "Get a baseline DAF size/cost and estimate the potential downstream biological load.",
+    // Combined focus: DAF sizing primary, biological load secondary
     hiddenFields: {
-      industry: "food_beverage",
+      conceptFocus: "daf_sizing", // Primary focus for calculator action
       contaminant_type: "Low-Density",
     },
     fields: [
+      {
+        name: "industry",
+        label: "Primary Industry",
+        type: "select",
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
+        defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
+      },
       {
         name: "flow_rate_m3_hr",
         label: "Flow Rate",
@@ -22,18 +37,28 @@ const pageConfig = {
         max: 500,
         step: 1,
         defaultValue: 50,
-        tooltip: "The volumetric flow rate of wastewater to be treated.",
+        tooltip: "The volumetric flow rate of wastewater.",
       },
       {
         name: "tss_mg_l",
-        label: "Suspended Solids (TSS)",
+        label: "Suspended Solids (TSS/FOG)",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1200,
+        tooltip: "Total Suspended Solids - influencing DAF SLR.",
+      },
+      {
+        name: "cod_mg_l", // Added COD input
+        label: "Estimated Influent COD",
+        unit: "mg/L",
+        min: 1500,
+        max: 12000,
+        step: 100,
+        defaultValue: 5000,
         tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+          "Chemical Oxygen Demand, indicates organic strength for potential biological treatment.",
       },
     ],
   },
@@ -52,7 +77,6 @@ const pageConfig = {
     },
   ],
 };
-
 export default function Page() {
   return (
     <SpokePage

@@ -6,34 +6,52 @@ const pageConfig = {
     "A diagnostic guide to common causes of high TSS, from chemical underdosing to hydraulic overloading.",
   videoPlaceholder: "Video: Fixing High TSS",
   calculatorConfig: {
-    title: "TSS Load Calculator",
+    title: "Troubleshooting Assistant",
     description:
-      "Calculate your daily solids load to understand the burden on your treatment system.",
+      "Select your primary treatment unit to get relevant troubleshooting tips in the report.",
     hiddenFields: {
-      industry: "food_beverage",
-      contaminant_type: "Low-Density",
+      conceptFocus: "troubleshooting", // Focus on troubleshooting
+      problem_type: "high_tss", // Define the problem for the backend
+      // Provide default industry/flow/tss for context if troubleshooting tips depend on it
+      flow_rate_m3_hr: 100,
+      tss_mg_l: 500, // Example effluent TSS
     },
     fields: [
       {
-        name: "flow_rate_m3_hr",
-        label: "Flow Rate",
-        unit: "m³/hr",
-        min: 1,
-        max: 1000,
-        step: 5,
-        defaultValue: 100,
-        tooltip: "Your average process flow rate.",
+        name: "industry",
+        label: "Primary Industry (Optional Context)",
+        type: "select",
+        // Include options from both categories + a general option
+        options: [
+          { value: "general_industrial", label: "General Industrial" }, // Added default
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          { value: "mining_beneficiation", label: "Mining & Beneficiation" },
+          { value: "heavy_industry_metals", label: "Heavy Industry / Metals" },
+          {
+            value: "aggregate_sand_washing",
+            label: "Aggregate / Sand Washing",
+          },
+          { value: "other", label: "Other" },
+        ],
+        defaultValue: "general_industrial", // Default to general
+        tooltip:
+          "Select your industry for potentially more tailored results or limits.",
       },
       {
-        name: "tss_mg_l",
-        label: "Effluent TSS Concentration",
-        unit: "mg/L",
-        min: 50,
-        max: 5000,
-        step: 50,
-        defaultValue: 500,
-        tooltip: "The TSS concentration measured in your final effluent.",
+        name: "technology_context", // Input to specify the equipment
+        label: "Primary Treatment Unit",
+        type: "select",
+        options: [
+          { value: "daf", label: "DAF System" },
+          { value: "clarifier", label: "Clarifier / Thickener" },
+          { value: "other", label: "Other / Unsure" },
+        ],
+        defaultValue: "daf",
+        tooltip: "Select the equipment experiencing high TSS in its effluent.",
       },
+      // Could add fields for observed symptoms if logic gets complex
     ],
   },
   hubLink: {

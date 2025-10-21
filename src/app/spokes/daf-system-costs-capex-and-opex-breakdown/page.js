@@ -10,6 +10,7 @@ const pageConfig = {
     description:
       "Generate a Class 4 cost estimate for a DAF system based on your flow and solids load.",
     hiddenFields: {
+      conceptFocus: "daf_sizing", // Sizing is required to estimate cost
       contaminant_type: "Low-Density",
     },
     fields: [
@@ -17,8 +18,15 @@ const pageConfig = {
         name: "industry",
         label: "Primary Industry",
         type: "select",
-        options: ["food_beverage", "meat_processing", "dairy_processing"],
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
         defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
       },
       {
         name: "flow_rate_m3_hr",
@@ -28,18 +36,17 @@ const pageConfig = {
         max: 500,
         step: 1,
         defaultValue: 50,
-        tooltip: "The volumetric flow rate of wastewater to be treated.",
+        tooltip: "Flow rate is a primary driver for DAF size and cost.",
       },
       {
         name: "tss_mg_l",
-        label: "Suspended Solids (TSS)",
+        label: "Suspended Solids (TSS/FOG)",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1200,
-        tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+        tooltip: "Solids load impacts DAF size (SLR) and chemical/sludge OPEX.",
       },
     ],
   },

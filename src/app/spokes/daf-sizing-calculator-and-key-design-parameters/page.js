@@ -1,7 +1,7 @@
 import SpokePage from "@/components/SpokePage";
 
 const pageConfig = {
-  title: "DAF Sizing & CAPEX Calculator",
+  title: "DAF Sizing & Key Design Parameters", // Title adjusted slightly
   description:
     "A direct consultation on the critical design parameters for sizing a Dissolved Air Flotation system: HLR and SLR.",
   videoPlaceholder: "Video: The DAF Specialist",
@@ -10,15 +10,23 @@ const pageConfig = {
     description:
       "Get the budgetary CAPEX, OPEX, and footprint data required for your pre-feasibility report.",
     hiddenFields: {
-      contaminant_type: "Low-Density",
+      conceptFocus: "daf_sizing", // Explicit DAF sizing focus
+      contaminant_type: "Low-Density", // Assumed context for DAF focus
     },
     fields: [
       {
         name: "industry",
         label: "Primary Industry",
         type: "select",
-        options: ["food_beverage", "meat_processing", "dairy_processing"],
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
         defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
       },
       {
         name: "flow_rate_m3_hr",
@@ -28,7 +36,7 @@ const pageConfig = {
         max: 500,
         step: 1,
         defaultValue: 50,
-        tooltip: "The volumetric flow rate of wastewater to be treated.",
+        tooltip: "The volumetric flow rate (determines area via HLR).",
       },
       {
         name: "tss_mg_l",
@@ -39,7 +47,7 @@ const pageConfig = {
         step: 100,
         defaultValue: 1200,
         tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+          "Total Suspended Solids - including FOG (determines area via SLR).",
       },
     ],
   },

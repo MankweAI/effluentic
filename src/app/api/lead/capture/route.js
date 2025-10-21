@@ -4,16 +4,25 @@ import { supabase } from "@/lib/supabaseClient";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, company, email, report_id, cta_type } = body;
+    // Added concept_focus to capture
+    const { name, company, email, report_id, cta_type, concept_focus } = body;
 
     if (!email || !report_id || !cta_type) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields: email, report_id, cta_type" },
         { status: 400 }
       );
     }
 
-    const leadData = { name, company, email, report_id, cta_type };
+    // concept_focus is good context but not strictly required for lead capture itself
+    const leadData = {
+      name,
+      company,
+      email,
+      report_id,
+      cta_type,
+      concept_focus,
+    };
 
     const { data, error } = await supabase
       .from("leads")
@@ -23,7 +32,7 @@ export async function POST(request) {
 
     if (error) {
       console.error("Supabase error inserting lead:", error.message);
-      throw new Error(error.message);
+      throw new Error(`Supabase error: ${error.message}`);
     }
 
     return NextResponse.json(
@@ -35,9 +44,13 @@ export async function POST(request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("API Error in /api/lead/capture:", error);
     return NextResponse.json(
-      { error: "Failed to capture lead" },
+      {
+        error: `Failed to capture lead: ${
+          error.message || "Internal server error"
+        }`,
+      },
       { status: 500 }
     );
   }

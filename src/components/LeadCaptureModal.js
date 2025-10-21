@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function LeadCaptureModal({
   reportId,
   ctaType,
+  conceptFocus, // Receive conceptFocus
   onClose,
   onFormSubmit,
 }) {
@@ -23,6 +24,10 @@ export default function LeadCaptureModal({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.email) {
+      setError("Email address is required.");
+      return;
+    }
     setIsLoading(true);
     setError("");
 
@@ -34,17 +39,23 @@ export default function LeadCaptureModal({
           ...formData,
           report_id: reportId,
           cta_type: ctaType,
+          concept_focus: conceptFocus, // Send conceptFocus with lead data
         }),
       });
 
+      const responseBody = await response.json(); // Read body regardless of status
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Submission failed");
+        console.error("Lead Capture API Error:", responseBody);
+        throw new Error(
+          responseBody.error || `Submission failed. Status: ${response.status}`
+        );
       }
 
       onFormSubmit(); // Notify parent component of success
     } catch (err) {
-      setError(err.message);
+      console.error("Lead Capture Submit Error:", err);
+      setError(err.message || "An unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }
@@ -56,33 +67,44 @@ export default function LeadCaptureModal({
     ? "Request Your Free Engineering Review"
     : "Get Your PDF Report";
   const modalSubtext = isReview
-    ? "An engineer will review your report and follow up via email with a 'Pre-Meeting Prep Sheet'."
-    : "We'll send a copy of this report to your inbox for your records. This is not a sales form.";
+    ? "An engineer will review your report (focused on: " +
+      (conceptFocus?.replace(/_/g, " ") || "General") +
+      ") and follow up via email."
+    : "We'll send a copy of this report (focused on: " +
+      (conceptFocus?.replace(/_/g, " ") || "General") +
+      ") to your inbox for your records.";
   const buttonText = isReview ? "Submit Request" : "Send PDF to My Inbox";
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 fade-in">
-      <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md m-4">
-        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4">
-          <div
-            className="bg-blue-600 h-1.5 rounded-full"
-            style={{ width: "100%" }}
-          ></div>
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 fade-in px-4">
+      {" "}
+      {/* Added padding for small screens */}
+      <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-md m-4 relative">
+        {" "}
+        {/* Added relative positioning */}
+        {/* Close button top right */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl leading-none"
+          aria-label="Close modal"
+        >
+          &times;
+        </button>
+        {/* Progress bar simulation or step indicator (optional) */}
+        {/* <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4">
+          <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: "100%" }}></div>
+        </div> */}
+        <div className="mb-5">
+          {" "}
+          {/* Adjusted spacing */}
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+            {modalTitle}
+          </h2>
+          <p className="text-gray-500 mt-2 text-sm sm:text-base">
+            {modalSubtext}
+          </p>
         </div>
-        <div className="flex justify-between items-start">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">{modalTitle}</h2>
-            <p className="text-gray-500 mt-2">{modalSubtext}</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            &times;
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="name"
@@ -94,9 +116,10 @@ export default function LeadCaptureModal({
               type="text"
               name="name"
               id="name"
+              autoComplete="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
           <div>
@@ -110,9 +133,10 @@ export default function LeadCaptureModal({
               type="text"
               name="company"
               id="company"
+              autoComplete="organization"
               value={formData.company}
               onChange={handleInputChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
           <div>
@@ -120,29 +144,63 @@ export default function LeadCaptureModal({
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email Address
+              Email Address <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
               name="email"
               id="email"
+              autoComplete="email"
               value={formData.email}
               onChange={handleInputChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              aria-describedby="email-error"
             />
           </div>
+
+          {error && (
+            <p
+              id="email-error"
+              className="text-red-500 text-sm mt-2 text-center"
+            >
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 transition-colors"
+            className="w-full flex justify-center items-center bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 transition-colors mt-6" // Added margin top
           >
-            {isLoading ? "Submitting..." : buttonText}
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Submitting...
+              </>
+            ) : (
+              buttonText
+            )}
           </button>
-          {error && (
-            <p className="text-red-500 text-sm mt-2 text-center">{error}</p>
-          )}
         </form>
       </div>
     </div>

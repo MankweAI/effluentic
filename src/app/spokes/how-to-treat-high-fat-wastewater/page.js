@@ -6,10 +6,11 @@ const pageConfig = {
     "A senior process engineer provides a comprehensive overview of treating high-fat, oil, and grease (FOG) wastewater.",
   videoPlaceholder: "Video: Treating High-FOG Effluent",
   calculatorConfig: {
-    title: "Get Your Baseline Data",
+    title: "Baseline DAF Sizer for FOG",
     description:
-      "Enter your plant's data to generate an instant pre-feasibility report for FOG treatment.",
+      "Enter your plant's data to generate an instant pre-feasibility report focused on DAF sizing for FOG treatment.",
     hiddenFields: {
+      conceptFocus: "fog_treatment", // Focus on FOG treatment (implies DAF)
       contaminant_type: "Low-Density",
     },
     fields: [
@@ -17,8 +18,15 @@ const pageConfig = {
         name: "industry",
         label: "Primary Industry",
         type: "select",
-        options: ["food_beverage", "meat_processing", "dairy_processing"],
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
         defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
       },
       {
         name: "flow_rate_m3_hr",
@@ -31,15 +39,14 @@ const pageConfig = {
         tooltip: "The volumetric flow rate of wastewater to be treated.",
       },
       {
-        name: "tss_mg_l",
-        label: "Suspended Solids (TSS)",
+        name: "tss_mg_l", // Retained as it includes FOG for SLR calculation
+        label: "FOG & TSS Concentration",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1200,
-        tooltip:
-          "Total Suspended Solids - the concentration of solid particles in the wastewater.",
+        tooltip: "Estimated Total Suspended Solids including FOG content.",
       },
     ],
   },
@@ -58,7 +65,6 @@ const pageConfig = {
     },
   ],
 };
-
 export default function Page() {
   // NOTE: The SpokePage component is not fully generic yet.
   // This is a simplified version for scaffolding.

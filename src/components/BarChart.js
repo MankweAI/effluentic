@@ -1,13 +1,29 @@
 "use client";
 import { useEffect, useState } from "react";
 
+// Helper to format currency robustly
+const formatCurrency = (value) => {
+  if (typeof value !== "number" || isNaN(value)) return "N/A";
+  return `R ${value.toLocaleString("en-ZA", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })}`;
+};
+
 const BarChart = ({ data }) => {
-  const capex = data?.capexMax || 0;
-  const opex = data?.opexAnnual || 0;
+  // Ensure data exists and values are numbers, default to 0 if not
+  const capex =
+    typeof data?.capexMax === "number" && !isNaN(data.capexMax)
+      ? data.capexMax
+      : 0;
+  const opex =
+    typeof data?.opexAnnual === "number" && !isNaN(data.opexAnnual)
+      ? data.opexAnnual
+      : 0;
 
-  const maxVal = Math.max(capex, opex) * 1.25;
+  // Calculate maxVal safely, ensuring it's not zero unless both capex and opex are zero
+  const maxVal = Math.max(capex, opex, 1) * 1.25; // Use Math.max(..., 1) to avoid division by zero if both are 0
 
-  // Animate the bars by starting from 0% and then transitioning to their true value.
   const [animatedCapex, setAnimatedCapex] = useState(0);
   const [animatedOpex, setAnimatedOpex] = useState(0);
 
@@ -18,18 +34,20 @@ const BarChart = ({ data }) => {
     const timer = setTimeout(() => {
       setAnimatedCapex(capexPercentage);
       setAnimatedOpex(opexPercentage);
-    }, 100); // small delay for smooth start
+    }, 100); // Small delay for smooth start
     return () => clearTimeout(timer);
-  }, [capexPercentage, opexPercentage]);
+  }, [capexPercentage, opexPercentage]); // Rerun animation if data changes
 
   return (
-    <div className="w-full h-64 bg-white p-4 rounded-xl shadow-md flex flex-col justify-end">
+    <div className="w-full h-64 bg-white p-4 rounded-xl shadow-md flex flex-col justify-end border border-gray-100">
       <h3 className="text-center text-lg font-semibold text-brand-navy-dark mb-4">
-        CAPEX vs OPEX
+        Budget CAPEX vs Annual OPEX
       </h3>
 
-      <div className="flex items-end justify-around h-full">
-        {/* CAPEX */}
+      <div className="flex items-end justify-around h-full pt-6">
+        {" "}
+        {/* Added padding top */}
+        {/* CAPEX Bar */}
         <div className="w-1/4 flex flex-col items-center h-full">
           <div className="relative flex flex-col justify-end h-full w-full">
             <div
@@ -37,39 +55,38 @@ const BarChart = ({ data }) => {
               style={{ height: `${animatedCapex}%` }}
             ></div>
             {/* Value label above the bar */}
-            <span className="absolute bottom-full mb-2 text-xs font-semibold text-blue-700">
-              {capex.toLocaleString()} ZAR
+            <span className="absolute bottom-full mb-2 text-xs font-semibold text-blue-700 whitespace-nowrap">
+              {formatCurrency(capex)}
             </span>
           </div>
           <p className="text-sm font-medium mt-3 text-brand-steel-dark">
             CAPEX
           </p>
         </div>
-
-        {/* OPEX */}
+        {/* OPEX Bar */}
         <div className="w-1/4 flex flex-col items-center h-full">
           <div className="relative flex flex-col justify-end h-full w-full">
             <div
               className="w-full bg-gradient-to-t from-green-600 to-green-400 rounded-t-lg transition-all duration-1000 ease-out"
               style={{ height: `${animatedOpex}%` }}
             ></div>
-            <span className="absolute bottom-full mb-2 text-xs font-semibold text-green-700">
-              {opex.toLocaleString()} ZAR
+            <span className="absolute bottom-full mb-2 text-xs font-semibold text-green-700 whitespace-nowrap">
+              {formatCurrency(opex)}
             </span>
           </div>
           <p className="text-sm font-medium mt-3 text-brand-steel-dark">OPEX</p>
         </div>
       </div>
 
-      {/* Optional legend or summary */}
+      {/* Legend */}
       <div className="mt-4 flex justify-center space-x-4 text-xs text-brand-steel-dark">
         <div className="flex items-center space-x-1">
           <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
-          <span>CAPEX</span>
+          <span>Budget CAPEX</span>
         </div>
         <div className="flex items-center space-x-1">
           <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-          <span>OPEX</span>
+          <span>Annual OPEX</span>
         </div>
       </div>
     </div>

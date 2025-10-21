@@ -6,34 +6,52 @@ const pageConfig = {
     "A visual explanation of the DAF process, from air saturation and coagulation to sludge removal.",
   videoPlaceholder: "Video: DAF Process Explained",
   calculatorConfig: {
-    title: "Air-to-Solids Ratio (ASR) Estimator",
+    title: "DAF System Sizing (Contextual)",
     description:
-      "Calculate the theoretical ASR for your DAF system, a key parameter for flotation efficiency.",
+      "Enter typical parameters to see how they influence the size and cost of a DAF system.",
+    // Focus remains DAF sizing to give context to the explanation
     hiddenFields: {
-      industry: "food_beverage",
+      conceptFocus: "daf_sizing",
+      industry: "food_beverage", // Default context
       contaminant_type: "Low-Density",
     },
     fields: [
       {
+        name: "industry",
+        label: "Primary Industry",
+        type: "select",
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
+        defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
+      },
+      {
         name: "flow_rate_m3_hr",
-        label: "Influent Flow Rate",
+        label: "Example Influent Flow Rate",
         unit: "m³/hr",
         min: 1,
         max: 500,
         step: 1,
         defaultValue: 50,
-        tooltip: "The main flow of wastewater into the DAF.",
+        tooltip: "How much wastewater enters the DAF unit per hour?",
       },
       {
         name: "tss_mg_l",
-        label: "Influent Solids (TSS)",
+        label: "Example Influent Solids (TSS/FOG)",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1200,
-        tooltip: "The concentration of solids in the influent wastewater.",
+        tooltip: "How much solid/oily material needs to be floated?",
       },
+      // Removed ASR calculation as it's complex for a basic calculator;
+      // focus on sizing based on flow/tss which is core to the concept.
     ],
   },
   hubLink: {

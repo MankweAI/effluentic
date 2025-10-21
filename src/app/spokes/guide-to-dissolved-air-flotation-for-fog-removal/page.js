@@ -8,8 +8,9 @@ const pageConfig = {
   calculatorConfig: {
     title: "DAF Sizing for FOG",
     description:
-      "Enter your parameters to get a preliminary size and cost estimate for a DAF system.",
+      "Enter your parameters to get a preliminary size and cost estimate for a DAF system specifically targeting FOG.",
     hiddenFields: {
+      conceptFocus: "daf_sizing", // Explicitly DAF Sizing focus
       contaminant_type: "Low-Density",
     },
     fields: [
@@ -17,8 +18,15 @@ const pageConfig = {
         name: "industry",
         label: "Primary Industry",
         type: "select",
-        options: ["food_beverage", "meat_processing", "dairy_processing"],
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
         defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
       },
       {
         name: "flow_rate_m3_hr",
@@ -28,17 +36,17 @@ const pageConfig = {
         max: 500,
         step: 1,
         defaultValue: 50,
-        tooltip: "The volumetric flow rate of wastewater to be treated.",
+        tooltip: "The volumetric flow rate of wastewater (HLR).",
       },
       {
-        name: "tss_mg_l",
-        label: "Suspended Solids (TSS)",
+        name: "tss_mg_l", // Includes FOG
+        label: "FOG & TSS Concentration",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1200,
-        tooltip: "Total Suspended Solids, including FOG content.",
+        tooltip: "Total Suspended Solids, including FOG content (SLR).",
       },
     ],
   },

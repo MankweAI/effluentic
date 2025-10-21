@@ -6,14 +6,30 @@ const pageConfig = {
     "A comparison of Dissolved Air Flotation and conventional oil-water separators for treating emulsified vs. free-floating oils.",
   videoPlaceholder: "Video: DAF vs. OWS",
   calculatorConfig: {
-    title: "Technology Selector",
+    title: "DAF Sizing (for Emulsified FOG)",
     description:
-      "Answer a few questions to see which technology is a better fit for your application.",
+      "Size a DAF system, typically preferred for emulsified FOG common in these industries. OWS are better for free oil.",
+    // Focus remains DAF sizing as OWS sizing is simpler and not implemented here
     hiddenFields: {
+      conceptFocus: "daf_sizing",
       industry: "food_beverage",
       contaminant_type: "Low-Density",
     },
     fields: [
+      {
+        name: "industry",
+        label: "Primary Industry",
+        type: "select",
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
+        defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
+      },
       {
         name: "flow_rate_m3_hr",
         label: "Flow Rate",
@@ -25,15 +41,15 @@ const pageConfig = {
         tooltip: "The volumetric flow rate of wastewater to be treated.",
       },
       {
-        name: "tss_mg_l",
-        label: "Emulsified FOG Content",
+        name: "tss_mg_l", // Label adjusted for context
+        label: "Emulsified FOG & TSS Content",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1000,
         tooltip:
-          "The concentration of chemically or mechanically emulsified FOG.",
+          "Concentration of emulsified FOG and associated solids influencing DAF sizing (SLR).",
       },
     ],
   },

@@ -6,19 +6,27 @@ const pageConfig = {
     "Explore the use of coagulants and flocculants in destabilizing oil-in-water emulsions prior to mechanical separation.",
   videoPlaceholder: "Video: Chemical Emulsion Breaking",
   calculatorConfig: {
-    title: "Estimate Chemical Dosage",
+    title: "Estimate Chemical Dosage for Emulsions",
     description:
-      "This calculator provides a rough estimate for coagulant demand based on your inputs.",
+      "This calculator provides a rough estimate for coagulant demand based on your inputs. Jar testing is required for accuracy.",
     hiddenFields: {
-      contaminant_type: "Low-Density",
+      conceptFocus: "chemical_dosing", // Focus on chemical dosing
+      contaminant_type: "Low-Density", // Assumed context for emulsions
     },
     fields: [
       {
         name: "industry",
         label: "Primary Industry",
         type: "select",
-        options: ["food_beverage", "meat_processing", "dairy_processing"],
+        // Options relevant to Low-Density / DAF applications
+        options: [
+          { value: "food_beverage", label: "Food & Beverage (General)" },
+          { value: "meat_processing", label: "Meat Processing" },
+          { value: "dairy_processing", label: "Dairy Processing" },
+          // Add other relevant low-density industries if applicable
+        ],
         defaultValue: "food_beverage",
+        tooltip: "Select the industry that best matches your application.",
       },
       {
         name: "flow_rate_m3_hr",
@@ -28,17 +36,17 @@ const pageConfig = {
         max: 500,
         step: 1,
         defaultValue: 50,
-        tooltip: "The volumetric flow rate of wastewater to be treated.",
+        tooltip: "The volumetric flow rate impacts total chemical consumption.",
       },
       {
-        name: "tss_mg_l",
+        name: "tss_mg_l", // Represents FOG + Solids load
         label: "FOG & TSS Concentration",
         unit: "mg/L",
         min: 100,
         max: 8000,
         step: 100,
         defaultValue: 1500,
-        tooltip: "The combined concentration of fats, oils, grease and solids.",
+        tooltip: "Combined concentration influencing coagulant demand.",
       },
     ],
   },
