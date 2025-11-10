@@ -101,7 +101,7 @@ const DiagnosticTool = () => {
                 <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
                   {step}
                 </div>
-                Where is **YOUR** blockage?
+                Where is your blockage?
               </div>
               <div className="text-gray-500 text-sm">
                 This tells us if YOUR problem is localised or structural.
@@ -279,13 +279,19 @@ export default function BlockedDrainDiagnosticPage() {
           {/* <video autoPlay loop muted className="w-full h-full object-cover">
             <source src="/path-to-your-video.mp4" type="video/mp4" />
           </video> */}
-          <div className="w-full h-full flex items-center justify-center text-gray-400 font-mono">
-            [Looping Background Video: Tradesman Fixing Drain]
-          </div>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          >
+            <source src="/videos/plumber_tradesmen.mp4" type="video/mp4" />
+          </video>
         </div>
 
         {/* Layer 2b: Overlay */}
-        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="absolute inset-0 bg-black/80"></div>
 
         {/* Layer 2c: Content */}
         <div className="relative z-10 flex flex-col items-center w-full max-w-4xl">
@@ -530,7 +536,6 @@ export default function BlockedDrainDiagnosticPage() {
           <PhoneIcon className="h-5 w-5" />
           Call 24/7
         </a>
-
       </div>
 
       {/* We need this style for the fade-in animation */}
