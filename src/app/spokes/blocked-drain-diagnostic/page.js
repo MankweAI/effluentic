@@ -522,7 +522,7 @@ export default function BlockedDrainDiagnosticPage() {
       </footer>
 
       {/* --- NEW: Sticky Mobile "Panic Bar" --- */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white p-3 border-t border-gray-200 shadow-lg grid grid-cols-2 gap-3">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white p-3 border-t border-gray-200 shadow-lg grid grid-cols-0 gap-3">
         <a
           href="tel:082-555-1234"
           className="flex items-center justify-center gap-2 bg-yellow-400 text-slate-900 font-bold py-3 px-4 rounded-full transition-all transform hover:scale-105"
@@ -530,12 +530,7 @@ export default function BlockedDrainDiagnosticPage() {
           <PhoneIcon className="h-5 w-5" />
           Call 24/7
         </a>
-        <a
-          href="#diagnostic-tool"
-          className="flex items-center justify-center bg-blue-600 text-white font-bold py-3 px-4 rounded-full transition-all transform hover:scale-105"
-        >
-          Start Diagnosis
-        </a>
+
       </div>
 
       {/* We need this style for the fade-in animation */}
