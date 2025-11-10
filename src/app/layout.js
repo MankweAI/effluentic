@@ -72,7 +72,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Header />
+        {/* <Header /> */}
         <main>{children}</main>
         <Footer />
       </body>
