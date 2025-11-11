@@ -351,9 +351,7 @@ export default function BlockedDrainDiagnosticPage() {
             Randburg&apos;s 5-Star Rated Drain Experts
           </h2>
           <p className="text-lg text-gray-600 mt-4 text-balance">
-            While competitors like{" "}
-            <span className="font-bold text-gray-800">[Competitor Name]</span>{" "}
-            average 4.1 stars, we guarantee 5-star service.
+            While our competitors average 4.1 stars, we guarantee 5-star service.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 text-left">
             {/* Review 1 */}
