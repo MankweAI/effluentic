@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-// Ensure TruckIcon exists in your components folder or remove if missing
 import TruckIcon from "@/components/icons/TruckIcon";
 import {
   PhoneIcon,
@@ -26,6 +25,7 @@ const GeyserDiagnosticTool = () => {
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  // Progress bar logic
   const progressPct =
     showResult || submitted ? 100 : Math.round(((step - 1) / 3) * 100);
 
@@ -39,27 +39,27 @@ const GeyserDiagnosticTool = () => {
     }
   };
 
-  // --- REVISED LOGIC: Sell the Problem, Not the Part ---
+  // LOGIC: Determine the likely problem based on inputs
   const getDiagnosisHeader = () => {
-    if (diagnosis.symptom === "leaking")
-      return "CRITICAL: Potential Cylinder Breach or Valve Fail";
-    if (diagnosis.symptom === "tripping")
+    if (diagnosis.symptom === "leaking") {
+      return "Urgent: Likely Burst Geyser or Valve Failure";
+    }
+    if (diagnosis.symptom === "tripping") {
       return "DANGER: Live Electrical Fault (Do Not Reset)";
-    if (diagnosis.symptom === "cold_water")
+    }
+    if (diagnosis.symptom === "cold_water") {
       return "Internal Component Failure (Requires Testing)";
+    }
     return "System Malfunction (Professional Assessment Needed)";
   };
 
   const getDiagnosisDescription = () => {
     if (diagnosis.symptom === "leaking") {
-      // Fear of damage
       return "If the cylinder has burst, your ceiling is at major risk of collapse. We need to determine if it's a simple valve seal or a structural failure immediately.";
     }
     if (diagnosis.symptom === "tripping") {
-      // Fear of shock
       return "This indicates water has likely breached the electrical housing. This is a fire and shock hazard. A certified plumber must isolate the unit before power is restored.";
     }
-    // Uncertainty of DIY
     return "It could be the element, thermostat, or a burnt wire. Without a multimeter test, you risk buying the wrong parts. We carry universal replacements to fix it in one visit.";
   };
 
@@ -68,6 +68,7 @@ const GeyserDiagnosticTool = () => {
     setSubmitted(true);
   };
 
+  // Button Helper
   const ToolButton = ({ onClick, text }) => (
     <button
       onClick={onClick}
@@ -83,7 +84,7 @@ const GeyserDiagnosticTool = () => {
         Check Your Geyser Symptoms
       </h2>
       <p className="text-gray-600 mb-6 text-base">
-        Answer 3 questions to see if this is a simple repair or an emergency.
+        Answer 3 questions to see if it&apos;s a simple repair or a replacement.
       </p>
 
       {/* Progress Bar */}
@@ -194,12 +195,7 @@ const GeyserDiagnosticTool = () => {
             </p>
 
             <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg my-4 border border-blue-100">
-              {/* Fallback if TruckIcon is not loaded correctly */}
-              {TruckIcon ? (
-                <TruckIcon className="h-5 w-5 text-blue-600" />
-              ) : (
-                <div className="h-5 w-5 bg-blue-600 rounded-full" />
-              )}
+              <TruckIcon className="h-5 w-5 text-blue-600" />
               <p className="text-blue-900 text-sm font-medium">
                 ✓ A technician is currently in <strong>Pretoria East</strong>{" "}
                 (Near Faerie Glen).
@@ -270,7 +266,7 @@ export default function GeyserRepairPretoriaEastPage() {
           <div className="flex items-center gap-2">
             <FireIcon className="h-6 w-6 text-red-600" />
             <div className="text-xl font-bold text-slate-900">
-              FixItNow Plumbers
+              Pretoria East Geysers
             </div>
           </div>
           <a
@@ -360,9 +356,9 @@ export default function GeyserRepairPretoriaEastPage() {
                 Electrical Repairs
               </h3>
               <p className="text-gray-600 mt-2 text-sm">
-                90% of &quot;broken&quot; geysers are just a blown element or
-                thermostat. We fix these on the spot for a fraction of the cost
-                of a new unit.
+                Often, a &quot;broken&quot; geyser is just a faulty element or
+                thermostat. We test components first to potentially save you the
+                cost of a full replacement.
               </p>
             </div>
             {/* Card 2 */}
