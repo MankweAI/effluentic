@@ -207,7 +207,7 @@ const GeyserDiagnosticTool = () => {
                 href="tel:012-555-0123"
                 className="w-full flex items-center justify-center bg-red-600 text-white font-bold py-4 px-4 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-300 transform hover:scale-105 text-center text-lg shadow-lg"
               >
-                Call Emergency Repair: 012 555 0123
+                Call Emergency Repair: 082 585 0123
               </a>
 
               <div className="text-center text-sm text-gray-500 mt-3">
@@ -274,7 +274,7 @@ export default function GeyserRepairPretoriaEastPage() {
             className="hidden md:flex items-center gap-2 bg-red-600 text-white font-bold py-2 px-5 rounded-full hover:bg-red-700 transition-all shadow-sm"
           >
             <PhoneIcon className="h-4 w-4" />
-            012 555 0123
+            082 585 0123
           </a>
         </nav>
       </header>
@@ -435,7 +435,7 @@ export default function GeyserRepairPretoriaEastPage() {
           className="flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-3 px-4 rounded-lg shadow-md active:scale-95 transition-transform"
         >
           <PhoneIcon className="h-5 w-5" />
-          Call Now: 012 555 0123
+          Call Now: 082 585 0123
         </a>
       </div>
     </div>
