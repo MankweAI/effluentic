@@ -266,7 +266,7 @@ export default function GeyserRepairPretoriaEastPage() {
           <div className="flex items-center gap-2">
             <FireIcon className="h-6 w-6 text-red-600" />
             <div className="text-xl font-bold text-slate-900">
-              Pretoria East Geysers
+              FixItNow Plumbers
             </div>
           </div>
           <a
